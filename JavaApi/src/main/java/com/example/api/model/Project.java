@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
+@Entity
+@Table(name = "projects")
 public class Project {
 
     @Id
@@ -13,16 +16,17 @@ public class Project {
     private Integer id;
 
     @Column(name = "project_name")
-    @NotBlank
+    @NotBlank(message = "Project name should not be blank")
     @NotNull
     private String projectName;
 
     @Column(name = "project_identifier", unique = true)
-    @NotBlank
+    @NotBlank(message = "Project Identifier should not be blank")
     @NotNull
+    @Size(min = 4, max = 8, message = "Project identifier should be between 4 to 8 characters long")
     private String projectIdentifier;
 
-    @NotBlank
+    @NotBlank(message = "Project description should not be blank")
     @NotNull
     private String description;
 
@@ -40,12 +44,12 @@ public class Project {
 
     @PrePersist
     protected void onCreatedAt(){
-        this.createdAt = createdAt;
+        this.createdAt = new Date();
     }
 
     @PreUpdate
     protected void onUpdatedAt(){
-        this.updateAt = updateAt;
+        this.updateAt = new Date();
     }
 
     public Project() {
