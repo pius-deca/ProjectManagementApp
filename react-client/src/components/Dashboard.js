@@ -11,7 +11,8 @@ class DashBoard extends Component{
         this.props.getProjects();
     }
 
-    render(){    
+    render(){ 
+        const { projects } = this.props.project    
         return (
             <div className="projects">
                 <div className="container">
@@ -21,8 +22,11 @@ class DashBoard extends Component{
                             <br />
                             <CreateProjectButton />
                             <br />
-                            <br />   
-                            <ProjectItem />                         
+                            <br />  
+                            {projects.map(project =>(
+                                <ProjectItem key ={project.id} project={project} /> 
+                            ))
+                            }                         
                         </div>
                     </div>
                 </div>
