@@ -30,15 +30,19 @@ public class Project {
     @NotNull
     private String description;
 
+    @Column(name = "start_date")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MMM-dd HH:mm:ss z")
-    private Date Start_date;
+    private Date start_date;
 
+    @Column(name = "end_date")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MMM-dd HH:mm:ss z")
     private Date end_date;
 
+    @Column(name = "created_at")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MMM-dd HH:mm:ss z")
     private Date createdAt;
 
+    @Column(name = "updated_at")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MMM-dd HH:mm:ss z")
     private Date updateAt;
 
@@ -87,19 +91,19 @@ public class Project {
         this.description = description;
     }
 
-    public Date getStart_date() {
-        return Start_date;
+    public Date getStartDate() {
+        return start_date;
     }
 
-    public void setStart_date(Date start_date) {
-        Start_date = start_date;
+    public void setStartDate(Date start_date) {
+        this.start_date = start_date;
     }
 
-    public Date getEnd_date() {
+    public Date getEndDate() {
         return end_date;
     }
 
-    public void setEnd_date(Date end_date) {
+    public void setEndDate(Date end_date) {
         this.end_date = end_date;
     }
 

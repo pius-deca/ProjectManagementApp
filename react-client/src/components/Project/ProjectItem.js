@@ -17,7 +17,7 @@ class ProjectItem extends Component{
                             <ul className="list-group">
                                 <a href="#">
                                     <li className="list-group-item">
-                                        <i className="fa fa-flag-checkered pr-1">  Project Board
+                                        <i className="fa fa-flag-checkered pr-1" style={{ color: "green" }}>  Project Board
                                         </i>
                                     </li>
                                 </a>
@@ -28,7 +28,7 @@ class ProjectItem extends Component{
                                 </a>
                                 <a href="#">
                                     <li className="list-group-item">
-                                        <i className="fa fa-minus-circle pr-1">  Project Board</i>
+                                        <i className="fa fa-minus-circle pr-1" style={{ color: "red" }}>  Project Board</i>
                                     </li>
                                 </a>
                             </ul>
