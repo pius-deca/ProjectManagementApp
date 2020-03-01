@@ -1,7 +1,9 @@
 package com.example.api.service;
 
 import com.example.api.exception.ProjectIdException;
+import com.example.api.model.Backlog;
 import com.example.api.model.Project;
+import com.example.api.repository.BacklogRepository;
 import com.example.api.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,15 +14,22 @@ import java.util.List;
 public class ProjectServiceImpl implements ProjectService {
 
     private ProjectRepository projectRepository;
+    private BacklogRepository backlogRepository;
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, BacklogRepository backlogRepository) {
         this.projectRepository = projectRepository;
     }
 
     public Project createAndUpdate(Project project){
         try{
             project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            if (project.getId() == null){
+                Backlog backlog = new Backlog();
+                project.setBacklog(backlog);
+                backlog.setProject(project);
+                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            }
             return projectRepository.save(project);
         }catch (Exception e){
             throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase() + "' already exists");
