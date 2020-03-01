@@ -19,4 +19,4 @@ export const getProjects = () => async dispatch =>{
         type:GET_PROJECTS,
         payload:res.data
     })
-}
+}  
