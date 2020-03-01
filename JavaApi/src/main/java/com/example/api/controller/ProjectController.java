@@ -1,13 +1,16 @@
 package com.example.api.controller;
 
 import com.example.api.model.Project;
+import com.example.api.service.MapValidationErrorService;
 import com.example.api.service.ProjectServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/project")
@@ -15,16 +18,34 @@ import javax.validation.Valid;
 public class ProjectController {
 
     private ProjectServiceImpl projectServiceImpl;
+    private MapValidationErrorService mapValidationErrorService;
 
     @Autowired
-    public ProjectController(ProjectServiceImpl projectServiceImpl) {
+    public ProjectController(ProjectServiceImpl projectServiceImpl, MapValidationErrorService mapValidationErrorService) {
         this.projectServiceImpl = projectServiceImpl;
+        this.mapValidationErrorService = mapValidationErrorService;
     }
 
     @PostMapping
-    public ResponseEntity<Project> create(@Valid @RequestBody Project project){
+    public ResponseEntity<?> create(@Valid @RequestBody Project project, BindingResult result){
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null){
+            return errorMap;
+        }
+
         Project newPoject = projectServiceImpl.createAndUpdate(project);
-        return new ResponseEntity<>(newPoject, HttpStatus.OK);
+        return new ResponseEntity<Project>(newPoject, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{project_id}")
+    public ResponseEntity<?> getByProjectIdentifier(@PathVariable(name = "project_id") String projectId){
+        Project project = projectServiceImpl.getByProjectId(projectId);
+        return new ResponseEntity<>(project, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public List<Project> getAllProjects(){
+        return projectServiceImpl.getAll();
     }
 }
 

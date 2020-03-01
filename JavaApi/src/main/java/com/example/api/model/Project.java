@@ -20,7 +20,7 @@ public class Project {
     @NotNull
     private String projectName;
 
-    @Column(name = "project_identifier", unique = true)
+    @Column(name = "project_identifier", unique = true, updatable = false)
     @NotBlank(message = "Project Identifier should not be blank")
     @NotNull
     @Size(min = 4, max = 8, message = "Project identifier should be between 4 to 8 characters long")
