@@ -4,12 +4,22 @@ import ProjectItem from './Project/ProjectItem';
 class DashBoard extends Component{
     render(){    
         return (
-            <nav className="navabar navbar-expand-sm navbar-dark bg-primary mb-4">
-                <h1 className="alert alert-warning">
-                    Welcome
-                </h1>
-                <ProjectItem />
-            </nav>
+            <div className="projects">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-md-12">
+                            <h1 className="display-4 text-center">Projects</h1>
+                            <br />
+                            <a href="ProjectForm.html" className="btn btn-lg btn-outline-info">
+                                Create a Project
+                            </a>
+                            <br />
+                            <br />   
+                            <ProjectItem />                         
+                        </div>
+                    </div>
+                </div>
+            </div>
             
         )
     }
