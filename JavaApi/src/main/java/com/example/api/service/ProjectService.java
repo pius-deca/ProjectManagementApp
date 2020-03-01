@@ -8,4 +8,5 @@ public interface ProjectService {
     public Project createAndUpdate(Project project);
     public Project getByProjectId(String projectId);
     public List<Project> getAll();
+    public void deleteByProjectId(String projectId);
 }
