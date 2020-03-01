@@ -19,20 +19,25 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     public ProjectServiceImpl(ProjectRepository projectRepository, BacklogRepository backlogRepository) {
         this.projectRepository = projectRepository;
+        this.backlogRepository = backlogRepository;
     }
 
     public Project createAndUpdate(Project project){
+        String projectId = (project.getProjectIdentifier().toUpperCase());
         try{
-            project.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+            project.setProjectIdentifier(projectId);
             if (project.getId() == null){
                 Backlog backlog = new Backlog();
                 project.setBacklog(backlog);
                 backlog.setProject(project);
-                backlog.setProjectIdentifier(project.getProjectIdentifier().toUpperCase());
+                backlog.setProjectIdentifier(projectId);
+            }
+            if (project.getId() != null){
+                project.setBacklog(backlogRepository.findByProjectIdentifier(projectId));
             }
             return projectRepository.save(project);
         }catch (Exception e){
-            throw new ProjectIdException("Project ID '" + project.getProjectIdentifier().toUpperCase() + "' already exists");
+            throw new ProjectIdException("Project ID '" + projectId + "' already exists");
         }
     }
 
