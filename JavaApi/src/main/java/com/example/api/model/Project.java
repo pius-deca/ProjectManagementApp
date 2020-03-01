@@ -31,14 +31,14 @@ public class Project {
     private String description;
 
     @Column(name = "start_date")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MMM-dd HH:mm:ss z")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date start_date;
 
     @Column(name = "end_date")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MMM-dd HH:mm:ss z")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private Date end_date;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MMM-dd HH:mm:ss z")
     private Date createdAt;
 

@@ -17,22 +17,22 @@ class ProjectItem extends Component{
                         </div>
                         <div className="col-md-4 d-lg-block">
                             <ul className="list-group">
-                                <a href="#">
+                                <Link to={`/updateProject/${project.projectIdentifier}`}>
                                     <li className="list-group-item">
                                         <i className="fa fa-flag-checkered pr-1" style={{ color: "green" }}>  Project Board
                                         </i>
                                     </li>
-                                </a>
+                                </Link>
                                 <Link to={`/updateProject/${project.projectIdentifier}`}>
                                     <li className="list-group-item">
                                         <i className="fa fa-edit pr-1">  Update Project Info</i>
                                     </li>
                                 </Link>
-                                <a href="#">
+                                <Link to={`/updateProject/${project.projectIdentifier}`}>
                                     <li className="list-group-item">
-                                        <i className="fa fa-minus-circle pr-1" style={{ color: "red" }}>  Project Board</i>
+                                        <i className="fa fa-minus-circle pr-1" style={{ color: "red" }}>  Delete Project</i>
                                     </li>
-                                </a>
+                                </Link>
                             </ul>
                         </div>
                     </div>
