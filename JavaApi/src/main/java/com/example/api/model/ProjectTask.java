@@ -1,6 +1,7 @@
 package com.example.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -21,7 +22,7 @@ public class ProjectTask {
     private String summary;
     private String acceptanceCriteria;
     private String status;
-    private Integer priority;
+    private Integer priority = 0;
 
     @Column(updatable = false)
     private String projectIdentifier;
@@ -36,6 +37,11 @@ public class ProjectTask {
     @Column(name = "updated_at")
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MMM-dd HH:mm:ss z")
     private Date updatedAt;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
+    @JsonIgnore
+    private Backlog backlog;
 
     public ProjectTask() {
     }
@@ -128,6 +134,14 @@ public class ProjectTask {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
     }
 
     @Override

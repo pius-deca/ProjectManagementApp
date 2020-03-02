@@ -1,6 +1,8 @@
 package com.example.api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -47,7 +49,7 @@ public class Project {
     private Date updateAt;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
-
+    @JsonIgnore
     private Backlog backlog;
 
     @PrePersist
