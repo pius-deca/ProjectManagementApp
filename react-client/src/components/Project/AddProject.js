@@ -73,7 +73,7 @@ class AddProject extends Component {
                                     )}
                                 </div>
                                 <div className="form-group">
-                                    <input
+                                     <input
                                         type="text"
                                         className={classnames("form-control", {
                                             "is-invalid":errors.projectIdentifier
