@@ -1,4 +1,4 @@
-package com.example.api.service;
+package com.decagon.queuepay.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

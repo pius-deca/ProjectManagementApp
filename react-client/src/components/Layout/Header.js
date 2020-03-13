@@ -27,8 +27,6 @@ class Header extends Component{
                                     Sign Up
                                 </Link>
                             </li>
-                        </ul>
-                        <ul className="navbar-nav ml-auto">
                             <li className="nav-item">
                                 <Link className="nav-link" to="login.html">
                                     Login
