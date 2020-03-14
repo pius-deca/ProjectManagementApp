@@ -29,14 +29,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
-
-
 
     @Override
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
