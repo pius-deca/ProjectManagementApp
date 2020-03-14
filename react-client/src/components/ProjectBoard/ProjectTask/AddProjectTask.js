@@ -47,8 +47,6 @@ class AddProjectTask extends Component {
         }
 
         this.props.addProjectTask(this.state.projectIdentifier, newProjectTask, this.props.history) 
-        console.log(newProjectTask);
-        
     }
 
     render() {
@@ -61,7 +59,7 @@ class AddProjectTask extends Component {
                     <div className="row">
                         <div className="col-md-8 m-auto">
                             <Link to={`/projectBoard/${id}`} className="btn btn-light">Back to project Board</Link>
-                            <h6 className="display-4 text-center">Add / Update Project Task</h6>
+                            <h6 className="display-4 text-center">Add Project Task</h6>
                             <p className="lead text-center">Project Name + Project Code</p>
                             <form onSubmit={this.onSubmit}>
                                 <div className="form-group">
