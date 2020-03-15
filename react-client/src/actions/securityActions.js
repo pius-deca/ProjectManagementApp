@@ -1,5 +1,7 @@
 import axios from 'axios'
-import { GET_ERRORS } from './types'
+import { GET_ERRORS, SET_CURRENT_USER } from './types'
+import setToken from '../securityUtils/setToken'
+import jwt_decode from 'jwt-decode'
 
 export const createNewUser = (newUser, history) => async dispatch =>{
     try {
@@ -18,19 +20,39 @@ export const createNewUser = (newUser, history) => async dispatch =>{
     }
 }
 
-export const loginUser = (user, history) => async dispatch =>{
+export const loginUser = LoginRequest => async dispatch=>{
     try {
-        await axios.post("/api/users/login", user)
-        history.push("/dashboard")
+        const response = await axios.post("/api/users/login", LoginRequest);
+        const {token} = response.data;
+        localStorage.setItem("token", token)
+        setToken(token)
+        const decodedToken = jwt_decode(token)
+
         dispatch({
-            type:GET_ERRORS,
-            payload:{}
-        })
+            type:SET_CURRENT_USER,
+            payload:decodedToken
+        })        
     } catch (error) {
         dispatch({
             type:GET_ERRORS,
             payload:error.response.data
         })
-        
     }
 }
+
+// export const loginUser = (user, history) => async dispatch =>{
+//     try {
+//         await axios.post("/api/users/login", user)
+//         history.push("/dashboard")
+//         dispatch({
+//             type:GET_ERRORS,
+//             payload:{}
+//         })
+//     } catch (error) {
+//         dispatch({
+//             type:GET_ERRORS,
+//             payload:error.response.data
+//         })
+        
+//     }
+// }
