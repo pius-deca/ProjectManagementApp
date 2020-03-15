@@ -56,39 +56,36 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String pt_sequence) {
-        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_sequence);
+    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String pt_sequence, String username) {
+        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_sequence, username);
         projectTask = updatedTask;
+
         return projectTaskRepository.save(projectTask);
     }
 
     @Override
     public List<ProjectTask> findBacklogById(String projectId, String username) {
-        projectServiceImpl.getByProjectId(projectId, username).getBacklog();
+        projectServiceImpl.getByProjectId(projectId, username);
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(projectId);
     }
 
     @Override
-    public ProjectTask findProjectTaskByProjectSequence(String backlog_id, String pt_sequence) {
-        Backlog backlog = backlogRepository.findByProjectIdentifier(backlog_id);
-        if (backlog == null){
-            throw new ProjectNotFoundException("Project with ID: '"+ backlog_id +"' not found");
-        }
+    public ProjectTask findProjectTaskByProjectSequence(String backlog_id, String pt_sequence, String username) {
+        projectServiceImpl.getByProjectId(backlog_id, username);
 
         ProjectTask projectTask = projectTaskRepository.findByProjectSequence(pt_sequence);
         if (projectTask == null){
             throw new ProjectNotFoundException("Project Task: '"+ pt_sequence +"' not found");
         }
-
-        if (!projectTask.getProjectIdentifier().equals(backlog_id.toUpperCase())){
+        if (!projectTask.getProjectIdentifier().equals(backlog_id)){
             throw new ProjectNotFoundException("Project Task: '"+ pt_sequence +"' does not exist in project: '"+ backlog_id);
         }
         return projectTask;
     }
 
     @Override
-    public void deleteProjectTaskByProjectSequence(String backlog_id, String pt_sequence) {
-        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_sequence);
+    public void deleteProjectTaskByProjectSequence(String backlog_id, String pt_sequence, String username) {
+        ProjectTask projectTask = findProjectTaskByProjectSequence(backlog_id, pt_sequence, username);
 
 //        Backlog backlog = projectTask.getBacklog();
 //        List<ProjectTask> projectTasks = backlog.getProjectTask();
