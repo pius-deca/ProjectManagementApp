@@ -7,8 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -33,6 +35,9 @@ public class User implements UserDetails {
     private String confirmPassword;
     private Date created_at;
     private Date updated_at;
+
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
 
     public User() {
     }
@@ -103,7 +108,6 @@ public class User implements UserDetails {
         this.updated_at = updated_at;
     }
 
-
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -132,5 +136,13 @@ public class User implements UserDetails {
     @JsonIgnore
     public boolean isEnabled() {
         return true;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

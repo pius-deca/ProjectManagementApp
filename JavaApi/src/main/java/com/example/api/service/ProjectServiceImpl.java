@@ -3,10 +3,13 @@ package com.example.api.service;
 import com.example.api.exception.ProjectIdException;
 import com.example.api.model.Backlog;
 import com.example.api.model.Project;
+import com.example.api.model.User;
 import com.example.api.repository.BacklogRepository;
 import com.example.api.repository.ProjectRepository;
+import com.example.api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -15,16 +18,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     private ProjectRepository projectRepository;
     private BacklogRepository backlogRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository, BacklogRepository backlogRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, BacklogRepository backlogRepository, UserRepository userRepository) {
         this.projectRepository = projectRepository;
         this.backlogRepository = backlogRepository;
+        this.userRepository = userRepository;
     }
 
-    public Project createAndUpdate(Project project){
+    public Project createAndUpdate(Project project, String username){
         String projectId = (project.getProjectIdentifier().toUpperCase());
         try{
+            User user = userRepository.findByUsername(username);
+            project.setUser(user);
+            project.setProjectLeader(user.getUsername());
+
             project.setProjectIdentifier(projectId);
             if (project.getId() == null){
                 Backlog backlog = new Backlog();

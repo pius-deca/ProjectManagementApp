@@ -17,13 +17,15 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public User registerUser(User newUser){
-        try{
+
+        User user = userRepository.findByUsername(newUser.getUsername());
+        if (user == null){
             newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
             newUser.setUsername(newUser.getUsername());
             newUser.setConfirmPassword("");
             return userRepository.save(newUser);
-        }catch (Exception e){
-            throw new UsernameAlreadyExistsException("Username '"+ newUser.getUsername() + "' already exists");
         }
+        throw new UsernameAlreadyExistsException("Username '"+ newUser.getUsername() + "' already exists");
+
     }
 }
