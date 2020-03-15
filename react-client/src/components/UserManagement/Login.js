@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types';
-import { loginUser} from '../../actions/securityActions'
+import { loginUser } from '../../actions/securityActions'
 import classnames from 'classnames'
 
 class Login extends Component {
@@ -31,12 +31,12 @@ class Login extends Component {
 
     onSubmit(e){
         e.preventDefault()
-        const login ={
+        const LoginRequest ={
             username:this.state.username,
             password:this.state.password
         }
 
-        this.props.loginUser(login, this.props.history)
+        this.props.loginUser(LoginRequest)
     }    
 
     render() {
@@ -94,6 +94,7 @@ Login.propTypes ={
 }
 
 const mapStateToProps = state =>({
+    security:state.security,
     errors:state.errors
 })
 export default connect(
