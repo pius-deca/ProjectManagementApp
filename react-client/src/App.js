@@ -14,6 +14,26 @@ import UpdateProjectTask from './components/ProjectBoard/ProjectTask/UpdateProje
 import Landing from './components/Layout/Landing'
 import SignUp from './components/UserManagement/SignUp';
 import Login from './components/UserManagement/Login';
+import jwt_decode from 'jwt-decode'
+import setToken from './securityUtils/setToken';
+import { SET_CURRENT_USER } from './actions/types';
+
+const token = localStorage.getItem("token")
+if (token) {
+  setToken(token)
+  const decodedToken = jwt_decode(token)
+
+  store.dispatch({
+    type:SET_CURRENT_USER,
+    payload:decodedToken
+  })
+
+  const currentTime =  Date.now()/100
+  if (decodedToken.exp < currentTime) {
+    window.location.href = "/"
+  }
+
+}
 
 function App() {
   return (

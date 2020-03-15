@@ -39,20 +39,3 @@ export const loginUser = LoginRequest => async dispatch=>{
         })
     }
 }
-
-// export const loginUser = (user, history) => async dispatch =>{
-//     try {
-//         await axios.post("/api/users/login", user)
-//         history.push("/dashboard")
-//         dispatch({
-//             type:GET_ERRORS,
-//             payload:{}
-//         })
-//     } catch (error) {
-//         dispatch({
-//             type:GET_ERRORS,
-//             payload:error.response.data
-//         })
-        
-//     }
-// }
