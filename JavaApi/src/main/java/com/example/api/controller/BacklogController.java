@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -27,18 +28,18 @@ public class BacklogController {
     }
 
     @PostMapping("/{project_identifier}")
-    public ResponseEntity<?> addPTtoBacklog(@Valid @RequestBody ProjectTask projectTask, BindingResult result, @PathVariable(name = "project_identifier") String project_identifier){
+    public ResponseEntity<?> addPTtoBacklog(@Valid @RequestBody ProjectTask projectTask, BindingResult result, @PathVariable(name = "project_identifier") String project_identifier, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null){
             return errorMap;
         }
-        ProjectTask projectTask1 = projectTaskServiceImpl.addProjectTask(project_identifier, projectTask);
+        ProjectTask projectTask1 = projectTaskServiceImpl.addProjectTask(project_identifier, projectTask, principal.getName());
         return new ResponseEntity<ProjectTask>(projectTask1, HttpStatus.OK);
     }
 
     @GetMapping("/{project_identifier}")
-    public ResponseEntity<List<ProjectTask>> getProjectBacklog(@PathVariable(name = "project_identifier") String project_identifier){
-        List<ProjectTask> projectTasks = projectTaskServiceImpl.findBacklogById(project_identifier);
+    public ResponseEntity<List<ProjectTask>> getProjectBacklog(@PathVariable(name = "project_identifier") String project_identifier, Principal principal){
+        List<ProjectTask> projectTasks = projectTaskServiceImpl.findBacklogById(project_identifier, principal.getName());
         return new ResponseEntity<>(projectTasks, HttpStatus.OK);
     }
 

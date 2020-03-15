@@ -11,4 +11,5 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
 
     Project findByProjectIdentifier(String projectId);
     List<Project> findAll();
+    List<Project> findByProjectLeader(String username);
 }

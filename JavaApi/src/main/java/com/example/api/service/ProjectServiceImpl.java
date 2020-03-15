@@ -1,6 +1,7 @@
 package com.example.api.service;
 
 import com.example.api.exception.ProjectIdException;
+import com.example.api.exception.ProjectNotFoundException;
 import com.example.api.model.Backlog;
 import com.example.api.model.Project;
 import com.example.api.model.User;
@@ -29,6 +30,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     public Project createAndUpdate(Project project, String username){
         String projectId = (project.getProjectIdentifier().toUpperCase());
+        if (project.getId() != null){
+            Project existingProject = projectRepository.findByProjectIdentifier(projectId);
+
+            if (existingProject != null && (!existingProject.getProjectLeader().equals(username))){
+                throw new ProjectNotFoundException(username + " does not have project of ID : " + projectId);
+            }else if (existingProject == null){
+                throw new ProjectNotFoundException("Project with ID : '"+ projectId+"' cannot be updated because it does not exists");
+            }
+        }
         try{
             User user = userRepository.findByUsername(username);
             project.setUser(user);
@@ -50,24 +60,24 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
-    public Project getByProjectId(String projectId){
+    public Project getByProjectId(String projectId, String username){
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-        if (project != null){
-            return project;
+        if (project == null){
+            throw new ProjectIdException("Project ID '" + projectId+ "' does not exists");
         }
-        throw new ProjectIdException("Project ID '" + projectId+ "' does not exists");
+
+        if (!project.getProjectLeader().equals(username)){
+            throw new ProjectNotFoundException(username + " does not have project of ID : " + projectId);
+        }
+        return project;
     }
 
-    public List<Project> getAll(){
-        return projectRepository.findAll();
+    public List<Project> getAll(String username){
+        return projectRepository.findByProjectLeader(username);
     }
 
     @Override
-    public void deleteByProjectId(String projectId) {
-        Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase());
-        if (project == null){
-            throw new ProjectIdException("Cannot delete Project with ID of '" + projectId + "'. This project does not exists");
-        }
-        projectRepository.delete(project);
+    public void deleteByProjectId(String projectId, String username) {
+        projectRepository.delete(getByProjectId(projectId, username));
     }
 }

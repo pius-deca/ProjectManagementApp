@@ -5,6 +5,7 @@ import com.example.api.exception.ProjectNotFoundException;
 import com.example.api.model.Backlog;
 import com.example.api.model.ProjectTask;
 import com.example.api.repository.BacklogRepository;
+import com.example.api.repository.ProjectRepository;
 import com.example.api.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,43 +17,42 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
     private BacklogRepository backlogRepository;
     private ProjectTaskRepository projectTaskRepository;
+    private ProjectRepository projectRepository;
+    private ProjectServiceImpl projectServiceImpl;
 
     @Autowired
-    public ProjectTaskServiceImpl(BacklogRepository backlogRepository, ProjectTaskRepository projectTaskRepository){
+    public ProjectTaskServiceImpl(BacklogRepository backlogRepository, ProjectTaskRepository projectTaskRepository, ProjectRepository projectRepository, ProjectServiceImpl projectServiceImpl){
         this.backlogRepository = backlogRepository;
         this.projectTaskRepository = projectTaskRepository;
+        this.projectRepository = projectRepository;
+        this.projectServiceImpl = projectServiceImpl;
     }
 
     @Override
-    public ProjectTask addProjectTask(String projectId, ProjectTask projectTask) {
-        try{
-            // get the project id from the backlog
-            Backlog backlog = backlogRepository.findByProjectIdentifier(projectId);
-            // set the project task backlog
-            projectTask.setBacklog(backlog);
-            // get the project task sequence from the backlog and increment by one
-            Integer backlogSequence = backlog.getPTSequence();
-            ++backlogSequence;
-            // set back the project task sequence after increment to get the updated project task sequence
-            backlog.setPTSequence(backlogSequence);
-            // set the project task sequence with the incremented backlog sequence
-            projectTask.setProjectSequence(projectId+ "-" +backlogSequence);
-            //set the project id
-            projectTask.setProjectIdentifier(projectId);
-            // set the priority to 3 only if the priority is 0 or null
-            if (projectTask.getPriority() == 0){
-                projectTask.setPriority(3);
-            }
-            // set the status to "to_do" only if it is empty or null
-            if (projectTask.getStatus().equals("") || projectTask.getStatus() == null){
-                projectTask.setStatus("TO_DO");
-            }
-            // save the project task
-            return projectTaskRepository.save(projectTask);
-        }catch (Exception e){
-            throw new ProjectNotFoundException("Project not found");
+    public ProjectTask addProjectTask(String projectId, ProjectTask projectTask, String username) {
+        // get the project id from the backlog
+        Backlog backlog = projectServiceImpl.getByProjectId(projectId, username).getBacklog();
+        // set the project task backlog
+        projectTask.setBacklog(backlog);
+        // get the project task sequence from the backlog and increment by one
+        Integer backlogSequence = backlog.getPTSequence();
+        ++backlogSequence;
+        // set back the project task sequence after increment to get the updated project task sequence
+        backlog.setPTSequence(backlogSequence);
+        // set the project task sequence with the incremented backlog sequence
+        projectTask.setProjectSequence(projectId+ "-" +backlogSequence);
+        //set the project id
+        projectTask.setProjectIdentifier(projectId);
+        // set the priority to 3 only if the priority is 0 or null
+        if (projectTask.getPriority() == null || projectTask.getPriority() == 0){
+            projectTask.setPriority(3);
         }
-
+        // set the status to "to_do" only if it is empty or null
+        if ( projectTask.getStatus() == null || projectTask.getStatus().equals("")){
+            projectTask.setStatus("TO_DO");
+        }
+        // save the project task
+        return projectTaskRepository.save(projectTask);
     }
 
     @Override
@@ -63,12 +63,9 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public List<ProjectTask> findBacklogById(String projectId) {
-        Backlog backlog = backlogRepository.findByProjectIdentifier(projectId);
-        if (backlog != null){
-            return projectTaskRepository.findByProjectIdentifierOrderByPriority(projectId);
-        }
-        throw new ProjectNotFoundException("Project ID '" + projectId + "' does not exists in backlog");
+    public List<ProjectTask> findBacklogById(String projectId, String username) {
+        projectServiceImpl.getByProjectId(projectId, username).getBacklog();
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(projectId);
     }
 
     @Override
