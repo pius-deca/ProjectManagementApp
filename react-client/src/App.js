@@ -29,7 +29,7 @@ if (token) {
     payload:decodedToken
   })
 
-  const currentTime =  Date.now()/100
+  const currentTime =  Date.now() / 1000
   if (decodedToken.exp < currentTime) {
     store.dispatch(logout())
     window.location.href = "/"

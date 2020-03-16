@@ -40,7 +40,7 @@ export const loginUser = LoginRequest => async dispatch=>{
     }
 }
 
-export const logout = () => dispatch=>{
+export const logout = () => dispatch =>{
     localStorage.removeItem("token")
     setToken(false)
     dispatch({

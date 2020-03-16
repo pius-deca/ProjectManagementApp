@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import ProjectItem from './Project/ProjectItem';
 import CreateProjectButton from './Project/CreateProjectButton';
 import { connect } from 'react-redux';
 import { getProjects } from '../actions/projectActions';
 import PropTypes from 'prop-types';
+import { projectBoardAlgorithm } from './Algorithm/projectBoardAlgorithm';
 
 class DashBoard extends Component{
 
@@ -12,7 +12,11 @@ class DashBoard extends Component{
     }
 
     render(){ 
-        const { projects } = this.props.project    
+        const { projects } = this.props.project   
+
+        let boardContent;
+        boardContent = projectBoardAlgorithm(projects);
+        
         return (
             <div className="projects">
                 <div className="container">
@@ -22,11 +26,9 @@ class DashBoard extends Component{
                             <br />
                             <CreateProjectButton />
                             <br />
-                            <br />  
-                            {projects.map(project =>(
-                                <ProjectItem key ={project.id} project={project} /> 
-                            ))
-                            }                         
+                            <br /> 
+                            
+                            { boardContent }
                         </div>
                     </div>
                 </div>

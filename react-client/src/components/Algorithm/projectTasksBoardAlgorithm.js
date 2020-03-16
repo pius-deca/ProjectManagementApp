@@ -1,7 +1,7 @@
 import React from 'react';
 import Backlog from "../ProjectBoard/Backlog"
 
-export const boardAlgorithm = (errors, project_tasks) =>{
+export const projectTaskBoardAlgorithm = (errors, project_tasks) =>{
     if (project_tasks.length < 1) {
         if (errors.projectIdentifier) {
             return(

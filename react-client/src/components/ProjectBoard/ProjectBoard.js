@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from "prop-types";
 import { getBacklog } from "../../actions/backlogActions"
-import { boardAlgorithm } from '../Algorithm/boardAlgorithm';
+import { projectTaskBoardAlgorithm } from '../Algorithm/projectTasksBoardAlgorithm';
 
 class ProjectBoard extends Component {
     constructor(){
@@ -32,7 +32,7 @@ class ProjectBoard extends Component {
         const { errors } = this.state
 
         let boardContent;
-        boardContent = boardAlgorithm(errors, project_tasks)
+        boardContent = projectTaskBoardAlgorithm(errors, project_tasks)
 
         return (
             <div className="container">
