@@ -39,3 +39,12 @@ export const loginUser = LoginRequest => async dispatch=>{
         })
     }
 }
+
+export const logout = () => dispatch=>{
+    localStorage.removeItem("token")
+    setToken(false)
+    dispatch({
+        type:SET_CURRENT_USER,
+        payload:{}
+    })
+}
